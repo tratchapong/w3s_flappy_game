@@ -1,8 +1,12 @@
 body {
   display : grid;
   place-items: center;
+  gap: 4px;
 }
 
+button {
+  display: inline-block;
+}
 canvas {
   border : 1px solid silver;
   background-color: #f1f1f1;
