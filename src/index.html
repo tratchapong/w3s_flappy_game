@@ -9,8 +9,9 @@
 <body onload="startGame()">
   <div class="control">
 
-    <button>Left</button>
-    <button>Right</button>
+    <button onmousedown="jump(-0.2)" onmouseup="jump(0.05)">Jump 1</button>
+    <button onclick="jump(-4)">Jump 2</button>
+    <!-- <button>Right</button> -->
   </div>
   <script src="./main.js"></script>
 </body>
