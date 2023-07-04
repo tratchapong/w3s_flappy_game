@@ -1,4 +1,4 @@
-let myGamePiece;
+// let myGamePiece;
 let myObstacles = [];
 let myScore;
 let myGameArea
@@ -20,22 +20,22 @@ class GameArea {
       if( actor.y < rockbottom) 
         return;
       if(e.key ===  ' ')
-        jump(-4)
+        jump(-4.8)
     } )
     document.addEventListener('keydown', e=> {
-      if(e.key === '.')
-        actor.speedX = 4
+      if(e.key === 'ArrowRight')
+        actor.speedX = 2
     })
     document.addEventListener('keyup', e=> {
-      if(e.key === '.')
+      if(e.key === 'ArrowRight')
         actor.speedX = 0
     })
     document.addEventListener('keydown', e=> {
-      if(e.key === ',')
-        actor.speedX = -4
+      if(e.key === 'ArrowLeft')
+        actor.speedX = -2
     })
     document.addEventListener('keyup', e=> {
-      if(e.key === ',')
+      if(e.key === 'ArrowLeft')
         actor.speedX = 0
     })
   }
@@ -88,35 +88,56 @@ class Component {
   }
 }  
 
-let title = new Component("30px", "Consolas", "violet", 280, 40, "text")
-title.text = "Codecamp"
+myScore = new Component("30px", "Consolas", "slateblue", 280, 40, "text")
 let actor = new Component(30, 30, "lime", 10, 120)
-let direction = 1
+let randomInterval = random(100, 150)
+
 
 function startGame() {
   myGameArea = new GameArea()
   myGameArea.start()
-  actor.update()
-  title.update()
+  myScore.text = 0
 }
 
 function updateGameArea() {
   let ctx = myGameArea.context
   myGameArea.clear()
-  if (title.x < -ctx.measureText(title.text).width ){
-    title.x = myGameArea.canvas.width
+  myGameArea.frameNo +=1
+  if(myGameArea.frameNo === 1 || everyInterval(150) ) {
+    // console.log(myObstacles.length)
+    let x = myGameArea.canvas.width
+    let randomHeight = random(30,50 )
+    // console.log(randomHeight)
+    let y = myGameArea.canvas.height - randomHeight
+    myObstacles.push(new Component(10,randomHeight, "red", x, y ))
+    // console.log(myObstacles)
   }
-  title.x -= 2
-  title.update()
-  // actor.x +=4 * direction
-  // if(actor.x > myGameArea.canvas.width - actor.width)
-  //   direction = -1
-  // if(actor.x < 0 )
-  //   direction = 1
+  for(let i=0; i<myObstacles.length; i++) {
+    myObstacles[i].x -= 1
+    myObstacles[i].update()
+    // if(myObstacles[i].x < -10) {
+    //   myObstacles.splice(i, 1)
+    // }
+  }
+  
+   myScore.text='SCORE: ' + myObstacles.length
+  myScore.update()
   actor.newPos()
   actor.update() 
 }
 
+function everyInterval(n) {
+  if( (myGameArea.frameNo / n) % 1 === 0) {
+    // myObstacles.filter( el=>el.x < -10)
+    return true 
+  }
+  return false
+}
+
 function jump(n) {
   actor.gravity = n
+}
+
+function random(min,max) {
+  return Math.floor(Math.random()*(max-min+1)+min)
 }
