@@ -86,6 +86,22 @@ class Component {
       this.gravitySpeed = 0
     } 
   }
+
+  crashWith(otherobj) {
+    let myleft = this.x
+    let myright = this.x + (this.width)
+    let mytop = this.y
+    let mybottom = this.y + (this.height)
+    let otherleft = otherobj.x
+    let otherright = otherobj.x + (otherobj.width)
+    let othertop = otherobj.y
+    let otherbottom = otherobj.y + (otherobj.height)
+    let crash = true
+    if( (mybottom < othertop) || (mytop > otherbottom) || (myright < otherleft) || (myleft > otherright)) {
+      crash = false
+    }
+    return crash
+  }
 }  
 
 myScore = new Component("30px", "Consolas", "slateblue", 280, 40, "text")
@@ -100,7 +116,11 @@ function startGame() {
 }
 
 function updateGameArea() {
-  let ctx = myGameArea.context
+  for(let i=0; i<myObstacles.length; i++) {
+    if(actor.crashWith(myObstacles[i])) {
+      return 
+    }
+  }
   myGameArea.clear()
   myGameArea.frameNo +=1
   if(myGameArea.frameNo === 1 || everyInterval(150) ) {
@@ -140,4 +160,8 @@ function jump(n) {
 
 function random(min,max) {
   return Math.floor(Math.random()*(max-min+1)+min)
+}
+
+function reset() {
+  window.location.reload()
 }
